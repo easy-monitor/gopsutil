@@ -454,29 +454,6 @@ func ConnectionsPidMaxWithoutUidsWithContext(ctx context.Context, kind string, p
 	return connectionsPidMaxWithoutUidsWithContext(ctx, kind, pid, max, true)
 }
 
-func connectionsPidMaxWithoutUidsWithContext(ctx context.Context, kind string, pid int32, max int, skipUids bool) ([]ConnectionStat, error) {
-	tmap, ok := netConnectionKindMap[kind]
-	if !ok {
-		return nil, fmt.Errorf("invalid kind, %s", kind)
-	}
-	root := common.HostProc()
-	var err error
-	var inodes map[string][]inodeMap
-	if pid == 0 {
-		inodes, err = getProcInodesAllWithContext(ctx, root, max)
-	} else {
-		inodes, err = getProcInodes(root, pid, max)
-		if len(inodes) == 0 {
-			// no connection for the pid
-			return []ConnectionStat{}, nil
-		}
-	}
-	if err != nil {
-		return nil, fmt.Errorf("cound not get pid(s), %d: %w", pid, err)
-	}
-	return statsFromInodesWithContext(ctx, root, pid, tmap, inodes, skipUids)
-}
-
 func statsFromInodes(root string, pid int32, tmap []netConnectionKindType, inodes map[string][]inodeMap, skipUids bool) ([]ConnectionStat, error) {
 	return statsFromInodesWithContext(context.Background(), root, pid, tmap, inodes, skipUids)
 }
