@@ -6,8 +6,8 @@ package net
 import (
 	"context"
 	"fmt"
-	"github.com/shirou/gopsutil/v3/internal/common"
-	netlink2 "github.com/shirou/gopsutil/v3/net/netlink"
+	"github.com/easy-monitor/gopsutil/v3/internal/common"
+	"github.com/easy-monitor/gopsutil/v3/net/netlink"
 	"strconv"
 	"sync"
 	"syscall"
@@ -74,7 +74,7 @@ func connectionsNetLink(kinds []netConnectionKindType, inodes map[string][]inode
 
 func getInetConnections(wait *sync.WaitGroup, i int, k netConnectionKindType, reply [][]ConnectionStat) {
 	defer wait.Done()
-	msgs, err := netlink2.InetConnections(uint8(k.family), k.netlinkProto)
+	msgs, err := netlink.InetConnections(uint8(k.family), k.netlinkProto)
 	if err != nil {
 		// just ignored
 		return
@@ -86,7 +86,7 @@ func getInetConnections(wait *sync.WaitGroup, i int, k netConnectionKindType, re
 			Type:   uint32(k.sockType),
 			Laddr:  Addr{msg.SrcIP().String(), uint32(msg.SrcPort())},
 			Raddr:  Addr{msg.DstIP().String(), uint32(msg.DstPort())},
-			Status: netlink2.TCPState(msg.State).String(),
+			Status: netlink.TCPState(msg.State).String(),
 			Uids:   []int32{int32(msg.UID)},
 			// Pid:    msg.Pid,
 			Fd: msg.Inode,
@@ -98,7 +98,7 @@ func getInetConnections(wait *sync.WaitGroup, i int, k netConnectionKindType, re
 
 func getUnixConnections(wait *sync.WaitGroup, i int, reply [][]ConnectionStat) {
 	defer wait.Done()
-	msgs, err := netlink2.UnixConnections()
+	msgs, err := netlink.UnixConnections()
 	if err != nil {
 		// just ignored
 		return
@@ -107,7 +107,7 @@ func getUnixConnections(wait *sync.WaitGroup, i int, reply [][]ConnectionStat) {
 	for i, msg := range msgs {
 		conn := ConnectionStat{
 			Family: uint32(msg.Family),
-			Status: netlink2.TCPState(msg.State).String(),
+			Status: netlink.TCPState(msg.State).String(),
 			Uids:   []int32{},
 			Laddr: Addr{
 				IP: msg.Path,

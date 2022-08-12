@@ -17,7 +17,7 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/shirou/gopsutil/v3/internal/common"
+	"github.com/easy-monitor/gopsutil/v3/internal/common"
 )
 
 const ( // Conntrack Column numbers
@@ -321,33 +321,38 @@ var tcpStatuses = map[string]string{
 }
 
 type netConnectionKindType struct {
-	family   uint32
-	sockType uint32
-	filename string
+	family       uint32
+	sockType     uint32
+	netlinkProto uint8
+	filename     string
 }
 
 var kindTCP4 = netConnectionKindType{
-	family:   syscall.AF_INET,
-	sockType: syscall.SOCK_STREAM,
-	filename: "tcp",
+	family:       syscall.AF_INET,
+	sockType:     syscall.SOCK_STREAM,
+	netlinkProto: syscall.IPPROTO_TCP,
+	filename:     "tcp",
 }
 
 var kindTCP6 = netConnectionKindType{
-	family:   syscall.AF_INET6,
-	sockType: syscall.SOCK_STREAM,
-	filename: "tcp6",
+	family:       syscall.AF_INET6,
+	sockType:     syscall.SOCK_STREAM,
+	netlinkProto: syscall.IPPROTO_TCP,
+	filename:     "tcp6",
 }
 
 var kindUDP4 = netConnectionKindType{
-	family:   syscall.AF_INET,
-	sockType: syscall.SOCK_DGRAM,
-	filename: "udp",
+	family:       syscall.AF_INET,
+	sockType:     syscall.SOCK_DGRAM,
+	netlinkProto: syscall.IPPROTO_UDP,
+	filename:     "udp",
 }
 
 var kindUDP6 = netConnectionKindType{
-	family:   syscall.AF_INET6,
-	sockType: syscall.SOCK_DGRAM,
-	filename: "udp6",
+	family:       syscall.AF_INET6,
+	sockType:     syscall.SOCK_DGRAM,
+	netlinkProto: syscall.IPPROTO_UDP,
+	filename:     "udp6",
 }
 
 var kindUNIX = netConnectionKindType{
