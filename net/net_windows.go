@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/easy-monitor/gopsutil/v3/internal/common"
+	"github.com/shirou/gopsutil/v3/internal/common"
 	"golang.org/x/sys/windows"
 )
 

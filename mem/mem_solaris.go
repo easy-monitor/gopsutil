@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/easy-monitor/gopsutil/v3/internal/common"
+	"github.com/shirou/gopsutil/v3/internal/common"
 )
 
 // VirtualMemory for Solaris is a minimal implementation which only returns

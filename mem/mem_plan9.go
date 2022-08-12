@@ -8,7 +8,7 @@ import (
 	"os"
 
 	stats "github.com/lufia/plan9stats"
-	"github.com/easy-monitor/gopsutil/v3/internal/common"
+	"github.com/shirou/gopsutil/v3/internal/common"
 )
 
 func SwapMemory() (*SwapMemoryStat, error) {
